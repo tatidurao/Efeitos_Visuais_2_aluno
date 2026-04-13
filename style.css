@@ -1,0 +1,315 @@
+:root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff416c;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            /****** faz largura e altura incluírem borda e padding no cálculo */
+            box-sizing: border-box;
+        }
+        
+        html {
+             /****** deixa a rolagem suave ao clicar em links internos */
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--dark);
+             /******* impede rolagem horizontal se algo passar da largura da tela */
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* HERO COM ANIMAÇÃO */
+        .animated-hero {
+            /*** altura mínima igual à altura inteira da tela */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            /**** permite posicionar elementos absolutos dentro dela */
+                /*relative = continua no lugar normal, mas pode ser ajustado e também vira referência para filhos.
+                absolute = sai do fluxo normal e pode ser colocado em uma posição exata dentro do pai posicionado.*/
+            position: relative;
+            /**** esconde o que sair da área da seção */
+            overflow: hidden;
+        }
+        
+        .hero-background {
+             /*** fica posicionado livremente dentro da seção */
+            position: absolute;
+            top: 0; /* encosta no topo */
+            left: 0; /* encosta na esquerda */
+            width: 100%;
+            height: 100%;
+            /*esolha a linha*/
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            /*zoom*/
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            /*2 posições atras*/
+            z-index: -2;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .floating-elements {
+            /* fica solta dentro da seção */
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            /***** fica atrás do conteúdo, mas na frente do fundo */
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear ;
+        }
+        
+        @keyframes float {
+            /* começa parado, invisível e sem rotação */
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; } /* aparece aos poucos */
+            90% { opacity: 1; }  /* continua visível quase toda a animação */
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } /* sobe até sair da tela, gira e some */
+        }
+        
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0; /* começa invisível */
+            transform: translateY(30px); /* começa um pouco para baixo */
+            /*****forwards -> quando termina, o elemento fica no estado final da animação*/
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+        
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 1s;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--accent);
+            color: white;
+            /**** remove sublinhado do link */
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            /* começa invisível */
+            opacity: 0;
+            /* começa menor que o tamanho normal */
+            transform: scale(0.8);
+            animation: popIn 0.5s forwards 1.5s;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;  /* esconde o brilho fora do botão */
+        }
+        
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* cria uma camada antes do conteúdo do botão para o efeito de brilho */
+        .cta-button::before {
+            content: ''; /*um elemento “extra” gerado pelo CSS antes do conteúdo real do elemento.*/
+            position: absolute;
+            top: 0;
+            left: -100%; /* começa totalmente fora à esquerda */
+            width: 100%;
+            height: 100%;
+            /* cria um brilho em faixa */
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.7s;
+        }
+        /* quando o mouse passa, o brilho atravessa o botão */
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4);
+        }
+
+         /* SCROLL INDICATOR */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%; /* centraliza horizontalmente */
+            transform: translateX(-50%); /* corrige para ficar exatamente no centro */
+            color: white;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); } /* posições normais da animação */
+            40% { transform: translateY(-20px) translateX(-50%); } /* sobe mais alto */
+            60% { transform: translateY(-10px) translateX(-50%); } /* desce um pouco menos antes de voltar */
+        }
+
+
+
+/*AULA 2 TIPOS DE ANIMAÇÕES*/
+  /* ANIMATIONS SHOWCASE */
+        .animations-section {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.8rem;
+            color: var(--dark);
+            position: relative; /* permite posicionar elementos filhos
+       absolutos em relação a este h2 */
+            display: inline-block; /* faz o h2 ocupar só o tamanho do conteúdo,
+       útil para o pseudo-elemento ficar alinhado */
+            padding-bottom: 15px; /* cria espaço abaixo do texto para a linha decorativa */
+        }
+        
+        .section-title h2::after { /*criar o pseudo-elemento*/
+            
+        }
+        
+        .animations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            /* cria colunas automáticas:
+            - cada card tenta ter no mínimo 300px
+            - pode crescer ocupando espaço disponível
+            - auto-fit organiza quantas colunas couberem */
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .animation-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .animation-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .animation-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .animation-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        /* ANIMAÇÕES INDIVIDUAIS */
+        .bounce-animation {
+            animation: bounceDemo 2s infinite;
+            /**/
+        }
+        
+        @keyframes bounceDemo {
+            
+        }
+        
+        .pulse-animation {
+            animation: pulseDemo 2s infinite;
+             /**/
+        }
+        
+        @keyframes pulseDemo {
+           
+        }
+        
+        .rotate-animation {
+            animation: rotateDemo 4s infinite linear;
+             /**/
+        }
+        
+        @keyframes rotateDemo {
+            
+        }
+        
+        .shake-animation {
+            animation: shakeDemo 0.5s infinite;
+             /**/
+        }
+        
+        @keyframes shakeDemo {
+           
+        }
+        
+        .float-animation {
+            animation: floatDemo 3s infinite ease-in-out;
+             /**/
+        }
+        
+        @keyframes floatDemo {
+           
+        }
+        
+        .color-change {
+            animation: colorChange 5s infinite alternate;
+             /**/
+        }
+        
+        @keyframes colorChange {
+            
+        }
